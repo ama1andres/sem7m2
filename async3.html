@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<head>
+    <title>Fetch User</title>
+</head>
+<body>
+    <h1>Fetch User Data</h1>
+    <label for="userId">Enter User ID:</label>
+    <input type="number" id="userId" placeholder="User ID" />
+    <button id="fetchUserBtn">Fetch User</button>
+    <div id="userData"></div>
+
+    <script>
+        document.getElementById('fetchUserBtn').addEventListener('click', async () => {
+            const userId = document.getElementById('userId').value;
+            const userDataDiv = document.getElementById('userData');
+            const url = `https://reqres.in/api/users/${userId}`;
+            //carga
+            userDataDiv.textContent = 'Loading...';
+            
+            try {
+                const response = await fetch(url);
+                if (response.status === 404) {
+                    userDataDiv.textContent = 'Error: User not found';
+                    return;
+                }
+                const data = await response.json();
+                const user = data.data;
+                userDataDiv.textContent = `Name: ${user.first_name} ${user.last_name}, Email: ${user.email}`;
+            } catch (error) {
+                userDataDiv.textContent = 'An error occurred. Please try again.';
+            }
+        });
+    </script>
+</body>
+</html>
